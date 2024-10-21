@@ -17,4 +17,5 @@ public interface UserService {
 
     void deleteUser(UUID id);
 
+    User registerUser(String username, String rawPassword, List<String> authorities);
 }

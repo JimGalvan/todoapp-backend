@@ -5,6 +5,7 @@ import com.example.todoapp.entities.User;
 import com.example.todoapp.repositories.UserRepository;
 import com.example.todoapp.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(User user) {
@@ -31,6 +35,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public User registerUser(String username, String rawPassword, List<String> authorities) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setAuthorities(authorities);
+        return userRepository.save(user);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.todoapp.controllers;
 
+import com.example.todoapp.dtos.user.UserRegistrationDto;
 import com.example.todoapp.entities.User;
 import com.example.todoapp.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,11 @@ public class UserController {
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody UserRegistrationDto userDto) {
+        List<String> authorities = List.of("USER");
+        return userService.registerUser(userDto.getUsername(), userDto.getPassword(), authorities);
     }
 }
