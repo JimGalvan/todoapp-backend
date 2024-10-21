@@ -1,18 +1,11 @@
 package com.example.todoapp.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
-public class Todo {
-    @Id
-    @GeneratedValue
-    private UUID id;
+public class Todo extends BaseEntity {
 
     private String title;
     private String description;
@@ -21,14 +14,6 @@ public class Todo {
     @ManyToOne
     @JoinColumn(name = "list_id")
     private TodoList list;
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getId() {
-        return id;
-    }
 
     public void setTitle(String title) {
         this.title = title;

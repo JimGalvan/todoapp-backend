@@ -1,28 +1,19 @@
 package com.example.todoapp.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue
-    private UUID id;
+@Table(name = "app_user")
+public class User extends BaseEntity {
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getId() {
-        return id;
-    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
