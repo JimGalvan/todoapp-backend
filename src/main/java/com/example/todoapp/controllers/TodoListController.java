@@ -1,7 +1,9 @@
 package com.example.todoapp.controllers;
 
+import com.example.todoapp.dtos.todolist.CreateTodoListResponseDto;
 import com.example.todoapp.entities.TodoList;
 import com.example.todoapp.services.interfaces.TodoListService;
+import com.example.todoapp.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -21,9 +23,9 @@ public class TodoListController {
     }
 
     @PostMapping
-    public TodoList createTodoList(@AuthenticationPrincipal Jwt jwt, @RequestBody TodoList todoList) {
-        String userId = jwt.getClaim("user_id");
-        return todoListService.createTodoList(todoList, UUID.fromString(userId));
+    public CreateTodoListResponseDto createTodoList(@AuthenticationPrincipal Jwt jwt, @RequestBody TodoList todoList) {
+        TodoList createdTodoList = todoListService.createTodoList(JwtUtils.getUserIdFromJwt(jwt), todoList);
+        return new CreateTodoListResponseDto(createdTodoList);
     }
 
     @PutMapping("/{id}")

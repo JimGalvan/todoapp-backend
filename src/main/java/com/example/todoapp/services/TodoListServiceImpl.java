@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,8 +24,12 @@ public class TodoListServiceImpl implements TodoListService {
     }
 
     @Override
-    public TodoList createTodoList(TodoList todoList, UUID userId) {
+    public TodoList createTodoList(UUID userId, TodoList todoList) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Optional<TodoList> existingList = todoListRepository.findByNameAndUserId(todoList.getName(), userId);
+        if (existingList.isPresent()) {
+            throw new RuntimeException("A list with the same name already exists for this user.");
+        }
         todoList.setUser(user);
         return todoListRepository.save(todoList);
     }

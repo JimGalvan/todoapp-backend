@@ -1,5 +1,6 @@
 package com.example.todoapp.controllers;
 
+import com.example.todoapp.dtos.auth.TokenResponseDto;
 import com.example.todoapp.entities.User;
 import com.example.todoapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/token")
-    public String token(Authentication authentication) {
+    public TokenResponseDto token(Authentication authentication) {
         Instant now = Instant.now();
         long expiry = 36000L;
 
@@ -44,7 +45,6 @@ public class AuthController {
         }
 
         String username = ((UserDetails) principal).getUsername();
-
         User user = userRepository.findByUsername(username);
         UUID user_id = user.getId();
 
@@ -61,6 +61,7 @@ public class AuthController {
                 .claim("user_id", user_id)
                 .build();
 
-        return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        String token = this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        return new TokenResponseDto(token);
     }
 }
