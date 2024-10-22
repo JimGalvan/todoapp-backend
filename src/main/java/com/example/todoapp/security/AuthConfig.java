@@ -66,13 +66,13 @@ public class AuthConfig {
 		http
 				.authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/auth/token",
-                                "/users/register",
+                                "/auth/register",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**"
                                 ).permitAll()
 						.anyRequest().authenticated()
 				)
-				.csrf((csrf) -> csrf.ignoringRequestMatchers("/auth/token", "/users/register"))
+				.csrf((csrf) -> csrf.ignoringRequestMatchers("/auth/token", "/auth/register"))
 				.httpBasic(Customizer.withDefaults())
 				.oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
 				.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
