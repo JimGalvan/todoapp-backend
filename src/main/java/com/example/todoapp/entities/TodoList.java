@@ -1,6 +1,9 @@
 package com.example.todoapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class TodoList extends BaseEntity {
@@ -9,6 +12,7 @@ public class TodoList extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     public void setName(String name) {

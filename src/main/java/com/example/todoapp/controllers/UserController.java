@@ -1,9 +1,12 @@
 package com.example.todoapp.controllers;
 
 import com.example.todoapp.dtos.user.UserRegistrationDto;
+import com.example.todoapp.entities.TodoList;
 import com.example.todoapp.entities.User;
+import com.example.todoapp.services.interfaces.TodoListService;
 import com.example.todoapp.services.interfaces.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +18,11 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final TodoListService todoListService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, TodoListService todoListService) {
         this.userService = userService;
+        this.todoListService = todoListService;
     }
 
     @PostMapping
@@ -45,9 +50,8 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/register")
-    public User register(@RequestBody UserRegistrationDto userDto) {
-        List<String> authorities = List.of("USER");
-        return userService.registerUser(userDto.getUsername(), userDto.getPassword(), authorities);
+    @GetMapping("/{id}/todolists")
+    public List<TodoList> getAllTodoListsByUserId(@AuthenticationPrincipal Jwt jwt, @PathVariable String id) {
+        return todoListService.getAllTodoListsByUserId(UUID.fromString(id));
     }
 }

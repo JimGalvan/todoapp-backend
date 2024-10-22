@@ -1,5 +1,6 @@
 package com.example.todoapp.services.interfaces;
 
+import com.example.todoapp.entities.Todo;
 import com.example.todoapp.entities.TodoList;
 
 import java.util.List;
@@ -15,4 +16,8 @@ public interface TodoListService {
     TodoList getTodoListById(UUID id);
 
     List<TodoList> getAllTodoLists();
+
+    List<TodoList> getAllTodoListsByUserId(UUID userId);
+
+    Todo addTodoToTodoList(UUID id, Todo todo);
 }

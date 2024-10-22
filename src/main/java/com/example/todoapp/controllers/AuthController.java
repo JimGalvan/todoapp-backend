@@ -1,8 +1,10 @@
 package com.example.todoapp.controllers;
 
 import com.example.todoapp.dtos.auth.TokenResponseDto;
+import com.example.todoapp.dtos.user.UserRegistrationDto;
 import com.example.todoapp.entities.User;
 import com.example.todoapp.repositories.UserRepository;
+import com.example.todoapp.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,10 +14,12 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,9 +31,17 @@ public class AuthController {
     JwtEncoder encoder;
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public AuthController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody UserRegistrationDto userDto) {
+        List<String> authorities = List.of("USER");
+        return userService.registerUser(userDto.getUsername(), userDto.getPassword(), authorities);
     }
 
     @PostMapping("/token")

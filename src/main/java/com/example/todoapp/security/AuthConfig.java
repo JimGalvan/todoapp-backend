@@ -65,7 +65,11 @@ public class AuthConfig {
         // @formatter:off
 		http
 				.authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/auth/token","/users/register").permitAll()
+                        .requestMatchers("/auth/token",
+                                "/users/register",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**"
+                                ).permitAll()
 						.anyRequest().authenticated()
 				)
 				.csrf((csrf) -> csrf.ignoringRequestMatchers("/auth/token", "/users/register"))

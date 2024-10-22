@@ -1,6 +1,7 @@
 package com.example.todoapp.controllers;
 
 import com.example.todoapp.dtos.todolist.CreateTodoListResponseDto;
+import com.example.todoapp.entities.Todo;
 import com.example.todoapp.entities.TodoList;
 import com.example.todoapp.services.interfaces.TodoListService;
 import com.example.todoapp.utils.JwtUtils;
@@ -46,5 +47,10 @@ public class TodoListController {
     @GetMapping
     public List<TodoList> getAllTodoLists() {
         return todoListService.getAllTodoLists();
+    }
+
+    @PostMapping("/{id}/todos")
+    public Todo addTodoToTodoList(@PathVariable UUID id, @RequestBody Todo todo) {
+        return todoListService.addTodoToTodoList(id, todo);
     }
 }
