@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TodoListService {
-    TodoList createTodoList(TodoList todoList);
+    TodoList createTodoList(TodoList todoList, UUID userId);
 
     TodoList updateTodoList(UUID id, TodoList todoList);
 

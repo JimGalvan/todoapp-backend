@@ -1,7 +1,9 @@
 package com.example.todoapp.services;
 
 import com.example.todoapp.entities.TodoList;
+import com.example.todoapp.entities.User;
 import com.example.todoapp.repositories.TodoListRepository;
+import com.example.todoapp.repositories.UserRepository;
 import com.example.todoapp.services.interfaces.TodoListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +14,18 @@ import java.util.UUID;
 @Service
 public class TodoListServiceImpl implements TodoListService {
 
-    @Autowired
-    private TodoListRepository todoListRepository;
+    private final TodoListRepository todoListRepository;
+    private final UserRepository userRepository;
+
+    public TodoListServiceImpl(TodoListRepository todoListRepository, UserRepository userRepository) {
+        this.todoListRepository = todoListRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public TodoList createTodoList(TodoList todoList) {
+    public TodoList createTodoList(TodoList todoList, UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        todoList.setUser(user);
         return todoListRepository.save(todoList);
     }
 

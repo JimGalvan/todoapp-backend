@@ -3,6 +3,8 @@ package com.example.todoapp.controllers;
 import com.example.todoapp.entities.TodoList;
 import com.example.todoapp.services.interfaces.TodoListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,12 +14,16 @@ import java.util.UUID;
 @RequestMapping("/todolists")
 public class TodoListController {
 
-    @Autowired
-    private TodoListService todoListService;
+    private final TodoListService todoListService;
+
+    public TodoListController(TodoListService todoListService) {
+        this.todoListService = todoListService;
+    }
 
     @PostMapping
-    public TodoList createTodoList(@RequestBody TodoList todoList) {
-        return todoListService.createTodoList(todoList);
+    public TodoList createTodoList(@AuthenticationPrincipal Jwt jwt, @RequestBody TodoList todoList) {
+        String userId = jwt.getClaim("user_id");
+        return todoListService.createTodoList(todoList, UUID.fromString(userId));
     }
 
     @PutMapping("/{id}")
