@@ -54,12 +54,6 @@ import java.util.Optional;
 @Configuration
 public class AuthConfig {
 
-//    @Value("${jwt.public.key}")
-//    RSAPublicKey key;
-//
-//    @Value("${jwt.private.key}")
-//    RSAPrivateKey priv;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // @formatter:off

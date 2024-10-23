@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface TodoRepository extends JpaRepository<Todo, UUID> {
     List<Todo> findByListId(UUID listId);
+
+    void deleteByListId(UUID id);
 }

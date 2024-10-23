@@ -45,6 +45,7 @@ public class TodoListServiceImpl implements TodoListService {
 
     @Override
     public void deleteTodoListById(UUID id) {
+//        todoRepository.deleteByListId(id);
         todoListRepository.deleteById(id);
     }
 
@@ -54,8 +55,8 @@ public class TodoListServiceImpl implements TodoListService {
     }
 
     @Override
-    public List<TodoList> getAllTodoLists() {
-        return todoListRepository.findAll();
+    public List<TodoList> getAllTodoLists(UUID userId) {
+        return todoListRepository.findAllByUserId(userId);
     }
 
     @Override

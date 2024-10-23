@@ -15,7 +15,7 @@ public interface TodoListService {
 
     TodoList getTodoListById(UUID id);
 
-    List<TodoList> getAllTodoLists();
+    List<TodoList> getAllTodoLists(UUID userId);
 
     List<TodoList> getAllTodoListsByUserId(UUID userId);
 
