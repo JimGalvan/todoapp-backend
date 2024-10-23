@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/todolists")
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class TodoListController {
 
     private final TodoListService todoListService;

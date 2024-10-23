@@ -1,7 +1,12 @@
-package com.example.todoapp.dtos.user;
+package com.example.todoapp.dtos.auth;
+
+import jakarta.validation.constraints.NotBlank;
+
 
 public class UserRegistrationDto {
+    @NotBlank(message = "Username is mandatory")
     private String username;
+    @NotBlank(message = "Password is mandatory")
     private String password;
 
     public UserRegistrationDto() {

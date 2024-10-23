@@ -1,22 +1,20 @@
 package com.example.todoapp.controllers;
 
 import com.example.todoapp.dtos.auth.TokenResponseDto;
-import com.example.todoapp.dtos.user.UserRegistrationDto;
+import com.example.todoapp.dtos.auth.UserRegistrationDto;
 import com.example.todoapp.entities.User;
 import com.example.todoapp.repositories.UserRepository;
 import com.example.todoapp.services.interfaces.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,6 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+//@CrossOrigin(origins = {"http://localhost:3000"})
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -39,7 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody UserRegistrationDto userDto) {
+    public User register(@Valid @RequestBody UserRegistrationDto userDto) {
         List<String> authorities = List.of("USER");
         return userService.registerUser(userDto.getUsername(), userDto.getPassword(), authorities);
     }
@@ -56,7 +55,13 @@ public class AuthController {
             throw new RuntimeException("Invalid authentication");
         }
 
-        String username = ((UserDetails) principal).getUsername();
+        String username = null;
+        try {
+            username = ((UserDetails) principal).getUsername();
+        } catch (ClassCastException e) {
+            username = ((Jwt) principal).getClaims().get("sub").toString();
+        }
+
         User user = userRepository.findByUsername(username);
         UUID user_id = user.getId();
 
@@ -74,6 +79,6 @@ public class AuthController {
                 .build();
 
         String token = this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-        return new TokenResponseDto(token);
+        return new TokenResponseDto(token, user_id);
     }
 }

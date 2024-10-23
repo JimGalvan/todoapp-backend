@@ -1,6 +1,5 @@
 package com.example.todoapp.controllers;
 
-import com.example.todoapp.dtos.user.UserRegistrationDto;
 import com.example.todoapp.entities.TodoList;
 import com.example.todoapp.entities.User;
 import com.example.todoapp.services.interfaces.TodoListService;
@@ -14,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+//@CrossOrigin(origins = {"http://localhost:3000"})
 @RequestMapping("/users")
 public class UserController {
 
@@ -53,5 +53,10 @@ public class UserController {
     @GetMapping("/{id}/todolists")
     public List<TodoList> getAllTodoListsByUserId(@AuthenticationPrincipal Jwt jwt, @PathVariable String id) {
         return todoListService.getAllTodoListsByUserId(UUID.fromString(id));
+    }
+
+    @GetMapping("/{id}/profile")
+    public User getUserProfile(@PathVariable String id) {
+        return userService.getUserById(UUID.fromString(id)).orElseThrow();
     }
 }

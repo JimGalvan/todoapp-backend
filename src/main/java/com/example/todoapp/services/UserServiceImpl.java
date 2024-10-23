@@ -53,6 +53,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserById(UUID id) {
-        return Optional.empty();
+        return userRepository.findById(id);
     }
 }

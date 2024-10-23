@@ -73,6 +73,7 @@ public class AuthConfig {
 						.anyRequest().authenticated()
 				)
 				.csrf((csrf) -> csrf.ignoringRequestMatchers("/auth/token", "/auth/register"))
+                .cors(Customizer.withDefaults())
 				.httpBasic(Customizer.withDefaults())
 				.oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
 				.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
