@@ -21,8 +21,9 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo updateTodo(UUID id, Todo todo) {
-        todo.setId(id);
+    public Todo updateTodo(UUID id, boolean isCompleted) {
+        Todo todo = todoRepository.findById(id).orElseThrow();
+        todo.setCompleted(isCompleted);
         return todoRepository.save(todo);
     }
 

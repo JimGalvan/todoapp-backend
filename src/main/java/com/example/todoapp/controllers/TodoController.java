@@ -1,42 +1,45 @@
 package com.example.todoapp.controllers;
 
+import com.example.todoapp.dtos.todo.TodoResponse;
+import com.example.todoapp.dtos.todo.UpdateTodoDto;
 import com.example.todoapp.entities.Todo;
+import com.example.todoapp.services.interfaces.TodoListService;
 import com.example.todoapp.services.interfaces.TodoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/todos")
+@RequestMapping("/todo-lists/{listId}/todo")
 public class TodoController {
 
-    @Autowired
-    private TodoService todoService;
+    private final TodoService todoService;
+    private final TodoListService todoListService;
+
+    public TodoController(TodoService todoService, TodoListService todoListService) {
+        this.todoService = todoService;
+        this.todoListService = todoListService;
+    }
 
     @PostMapping
-    public Todo createTodo(@RequestBody Todo todo) {
-        return todoService.createTodo(todo);
+    public Todo addTodoToTodoList(@PathVariable UUID listId, @RequestBody Todo todo) {
+        return todoListService.addTodoToTodoList(listId, todo);
     }
 
-    @PutMapping("/{id}")
-    public Todo updateTodo(@PathVariable UUID id, @RequestBody Todo todo) {
-        return todoService.updateTodo(id, todo);
+    @PutMapping("/{todoId}")
+    public TodoResponse updateTodo(@PathVariable String listId, @PathVariable UUID todoId, @RequestBody UpdateTodoDto request) {
+        boolean isCompleted = request.getIsCompleted();
+        Todo todo = todoService.updateTodo(todoId, isCompleted);
+        return TodoResponse.fromEntity(todo);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteTodoById(@PathVariable UUID id) {
-        todoService.deleteTodoById(id);
+    @DeleteMapping("/{todoId}")
+    public void deleteTodoById(@PathVariable String listId, @PathVariable UUID todoId) {
+        todoService.deleteTodoById(todoId);
     }
 
-    @GetMapping("/{id}")
-    public Todo getTodoById(@PathVariable UUID id) {
-        return todoService.getTodoById(id);
-    }
-
-    @GetMapping
-    public List<Todo> getAllTodos() {
-        return todoService.getAllTodos();
+    @GetMapping("/{todoId}")
+    public Todo getTodoById(@PathVariable String listId, @PathVariable UUID todoId) {
+        return todoService.getTodoById(todoId);
     }
 }

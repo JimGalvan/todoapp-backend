@@ -5,7 +5,6 @@ import com.example.todoapp.entities.Todo;
 import com.example.todoapp.entities.TodoList;
 import com.example.todoapp.services.interfaces.TodoListService;
 import com.example.todoapp.utils.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/todolists")
+@RequestMapping("/todo-lists")
 public class TodoListController {
 
     private final TodoListService todoListService;
@@ -29,28 +28,28 @@ public class TodoListController {
         return new CreateTodoListResponseDto(createdTodoList);
     }
 
-    @PutMapping("/{id}")
-    public TodoList updateTodoList(@PathVariable UUID id, @RequestBody TodoList todoList) {
-        return todoListService.updateTodoList(id, todoList);
+    @GetMapping("/{listId}/todos")
+    public List<Todo> getAllTodosFromTodoList(@PathVariable UUID listId) {
+        return todoListService.getAllTodosFromTodoList(listId);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteTodoListById(@PathVariable UUID id) {
-        todoListService.deleteTodoListById(id);
+    @PutMapping("/{listId}")
+    public TodoList updateTodoList(@PathVariable UUID listId, @RequestBody TodoList todoList) {
+        return todoListService.updateTodoList(listId, todoList);
     }
 
-    @GetMapping("/{id}")
-    public TodoList getTodoListById(@PathVariable UUID id) {
-        return todoListService.getTodoListById(id);
+    @DeleteMapping("/{listId}")
+    public void deleteTodoListById(@PathVariable UUID listId) {
+        todoListService.deleteTodoListById(listId);
+    }
+
+    @GetMapping("/{listId}")
+    public TodoList getTodoListById(@PathVariable UUID listId) {
+        return todoListService.getTodoListById(listId);
     }
 
     @GetMapping
     public List<TodoList> getAllTodoLists() {
         return todoListService.getAllTodoLists();
-    }
-
-    @PostMapping("/{id}/todos")
-    public Todo addTodoToTodoList(@PathVariable UUID id, @RequestBody Todo todo) {
-        return todoListService.addTodoToTodoList(id, todo);
     }
 }

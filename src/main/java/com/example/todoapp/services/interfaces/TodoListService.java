@@ -20,4 +20,6 @@ public interface TodoListService {
     List<TodoList> getAllTodoListsByUserId(UUID userId);
 
     Todo addTodoToTodoList(UUID id, Todo todo);
+
+    List<Todo> getAllTodosFromTodoList(UUID listId);
 }

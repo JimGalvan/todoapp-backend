@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface TodoService {
     Todo createTodo(Todo todo);
 
-    Todo updateTodo(UUID id, Todo todo);
+    Todo updateTodo(UUID id, boolean isCompleted);
 
     void deleteTodoById(UUID id);
 

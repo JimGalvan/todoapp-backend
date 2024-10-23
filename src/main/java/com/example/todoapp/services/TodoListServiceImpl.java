@@ -70,4 +70,9 @@ public class TodoListServiceImpl implements TodoListService {
         todoRepository.save(todo);
         return todo;
     }
+
+    @Override
+    public List<Todo> getAllTodosFromTodoList(UUID listId) {
+        return todoRepository.findByListId(listId);
+    }
 }
