@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/todos")
-@CrossOrigin(origins = {"http://localhost:3000"})
 public class TodoController {
 
     @Autowired
